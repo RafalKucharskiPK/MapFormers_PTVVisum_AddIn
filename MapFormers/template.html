@@ -1,0 +1,153 @@
+<html>
+<head>
+
+<style type="text/css">
+			body{
+				margin: 0;
+			}
+		</style>
+
+
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script src="http://maps.google.com/maps/api/js?v=3.3&sensor=false"></script>  
+  
+  <script>
+  var xpos;
+  var ypos;
+  var map;
+  var markers;
+  var Gx;
+  var Gy;
+  
+  OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
+                defaultHandlerOptions: {
+                    'single': true,
+                    'double': false,
+                    'pixelTolerance': 0,
+                    'stopSingle': false,
+                    'stopDouble': false
+                },
+
+                initialize: function(options) {
+                    this.handlerOptions = OpenLayers.Util.extend(
+                        {}, this.defaultHandlerOptions
+                    );
+                    OpenLayers.Control.prototype.initialize.apply(
+                        this, arguments
+                    ); 
+                    this.handler = new OpenLayers.Handler.Click(
+                        this, {
+                            'click': this.trigger
+                        }, this.handlerOptions
+                    );
+                }, 
+
+                trigger: function(e) {
+				
+
+                    var pix= new OpenLayers.Pixel(e.x,e.y);
+					
+					
+                    var lonlat = map.getLonLatFromViewPortPx(pix);
+					
+                    //var pixpos= map.getViewPortPxFromLonLat(lonlat);
+					
+					var lonlatGCS = OpenLayers.Layer.SphericalMercator.inverseMercator(lonlat.lon, lonlat.lat);
+					
+                    xpos=lonlatGCS.lon;
+                    ypos=lonlatGCS.lat;
+                    
+                    markers.clearMarkers();
+					var size = new OpenLayers.Size(21,25);
+					var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+					var icon = new OpenLayers.Icon('http://www.openlayers.org/api/img/marker.png',size,offset);
+					markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(lonlat.lon,lonlat.lat),icon));
+                    markers.redraw();
+                    alert("You clicked near " + xpos + " N, " +
+                                              + ypos + " E");
+                     
+                }
+
+            });
+            
+function init(){
+
+
+    //map = new OpenLayers.Map("map",{projection: new OpenLayers.Projection("EPSG:4326")}); 
+	
+	
+    //map = new OpenLayers.Map('map', {projection: new OpenLayers.Projection("EPSG:4362")});
+	  map = new OpenLayers.Map('map',{      
+        projection: new OpenLayers.Projection("EPSG:4362"),
+       maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34)});
+    
+    //var ol_wms = new OpenLayers.Layer.WMS( "OpenLayers WMS",
+    //                "http://vmap0.tiles.osgeo.org/wms/vmap0?", {layers: 'basic'} );
+ 
+//map.addLayer(ol_wms)
+    
+    
+    var gmap1 = new OpenLayers.Layer.Google("Google Roadmap",{type: google.maps.MapTypeId.ROADMAP});
+	var gmap2 = new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE});
+	var gmap3 = new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID});
+	var gmap4 = new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN});
+	//var osm = new OpenLayers.Layer.OSM(); 	
+	
+    map.addLayer(gmap2);
+    map.addLayer(gmap3);
+    map.addLayer(gmap4);
+	map.addLayer(gmap1);
+    map.setBaseLayer(gmap1);
+	map.setCenter(new OpenLayers.LonLat(446000,7340000), 4);
+    var click = new OpenLayers.Control.Click();
+    map.addControl(click);
+    click.activate();
+    markers=new OpenLayers.Layer.Markers("Markers")
+    map.addLayer(markers);	
+	map.addControl(new OpenLayers.Control.MousePosition());
+	
+        
+    
+    
+    var size = new OpenLayers.Size(21,25);
+    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+    var icon = new OpenLayers.Icon('http://www.openlayers.org/api/img/marker.png',size,offset);
+    markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(446000,7340000),icon));
+    map.addControl(new OpenLayers.Control.LayerSwitcher());
+    
+	markers.events.register('mousedown', markers, function() {
+    alert("The marker is near " + xpos + " N, " +
+                                              + ypos + " E");
+    });
+
+}
+
+function returnposx(){
+return xpos;
+}
+function returnposy(){
+return ypos;
+}
+
+function markerf(){
+
+markers.clearMarkers();
+var size = new OpenLayers.Size(21,25);
+var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+var icon = new OpenLayers.Icon('http://www.openlayers.org/api/img/marker.png',size,offset);
+var lonlat1=new OpenLayers.LonLat(Gy,Gx);
+markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(Gy,Gx),icon));
+markers.redraw();
+}
+
+function removemarkers(){
+markers.clearMarkers();
+}
+       
+  </script>
+
+</head>
+<body onload="init()">
+  	<div id="map"></div>
+
+</body></html>

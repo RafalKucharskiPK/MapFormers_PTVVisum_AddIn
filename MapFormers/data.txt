@@ -1,0 +1,8 @@
+2 # this is a 2-D input set
+6 # number of points
+0.000000 0.000000 # data point 0
+1.000000 1.000000 # data point 1
+2.000000 2.000000 # data point 2
+3.000000 3.000000 # data point 3
+4.000000 4.000000 # data point 4
+5.000000 5.000000 # data point 5
