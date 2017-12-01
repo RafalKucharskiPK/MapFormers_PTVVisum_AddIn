@@ -1,2 +1,7 @@
+# DISCLAIMER
+
+This is a free copy of the depreciated product, offered several years ago at PTV Visum MarketPlace. This is not a standalone product, but Add-in for the PTV Visum software. The product is not mainained anymore. You can freely use it, or copy the code snippets to make your solutions. Though, there is no guarantee anymore.
+
+
 # MapFormers_PTVVisum_AddIn
 MapFormers allows you to geolocate your network in case it was created without any geographic reference. Result is WGS-84 geolocated network with appropriate georeference.  This add-in will ask you for reference nodes. The more nodes you will reference the better results you will get. For each of them you need to point it exact location on the map. The more precisely you will specify node locations the better results you will get.  If node references are collected press Next button. You can choose one of three available options. First one is appropriate for networks where scale for x axis and scale for y axis are equal. This case is unlikely in most cases. But it provides the most straightforward solution. Second option is appropriate for most cases. By means of linear regression it chooses the most coherent subset from referenced nodes and adjusts the network. You can specify the confidence factor for references (default 0.8). Third option is appropriate for adjusting acitve part of network. It doesn't adjust the scale, it only moves the network based on reference node, which number is to be specified with box on the right.
